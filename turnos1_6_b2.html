@@ -1,0 +1,384 @@
+﻿<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turnos 1.6 B2</title>
+
+<style>
+
+/* ----------------------------- */
+/*      ESTILOS GENERALES        */
+/* ----------------------------- */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+}
+
+/* Contenedor principal */
+#contenedor {
+    width: 98%;
+    margin: auto;
+}
+
+/* Encabezado */
+header {
+    background: #003366;
+    color: white;
+    padding: 10px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* Botones */
+button {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.boton-primario {
+    background: #0066cc;
+    color: white;
+}
+
+.boton-secundario {
+    background: #e0e0e0;
+    color: #333;
+}
+
+/* ----------------------------- */
+/*      TABLA DE TURNOS          */
+/* ----------------------------- */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    background: white;
+}
+
+th, td {
+    border: 1px solid #cccccc;
+    padding: 4px;
+    text-align: center;
+    font-size: 13px;
+}
+
+/* Día actual */
+.dia-actual {
+    border: 2px solid #ff9900 !important;
+}
+
+/* Turnos */
+.turno-m { background: #d0ffd0; }
+.turno-t { background: #d0e0ff; }
+.turno-n { background: #ffe0d0; }
+.franco  { background: #eee0ff; }
+
+/* ----------------------------- */
+/*      PANEL DE DETALLE         */
+/* ----------------------------- */
+
+#detalle {
+    margin-top: 18px;
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    min-height: 120px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.25);
+}
+
+.mov {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.mov:last-child {
+    border-bottom: none;
+}
+
+.mov-texto {
+    font-size: 14px;
+    flex: 1;
+    text-align: left;
+}
+
+.mov-iconos {
+    display: flex;
+    gap: 10px;
+}
+
+.mov-iconos .icono {
+    cursor: pointer;
+    font-size: 20px;
+    opacity: 0.75;
+}
+
+.mov-iconos .icono:hover {
+    opacity: 1;
+}
+
+/* No imprimir iconos */
+@media print {
+    .mov-iconos { display: none !important; }
+}
+
+</style>
+
+</head>
+/* ----------------------------- */
+/*      COLORES DE REFERENCIA    */
+/* ----------------------------- */
+
+.ref-turno-m {
+    background: #b8ffb8;
+    border: 1px solid #6bc36b;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.ref-turno-t {
+    background: #b8d0ff;
+    border: 1px solid #6b85c3;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.ref-turno-n {
+    background: #ffccb8;
+    border: 1px solid #c37b6b;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.ref-franco {
+    background: #ead5ff;
+    border: 1px solid #a57cc3;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.ref-trasladable {
+    background: #dff3ff;
+    border: 1px solid #7cb2d6;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.ref-inamovible {
+    background: #ffe8e8;
+    border: 1px solid #d17b7b;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.ref-turistico {
+    background: #f9ffcc;
+    border: 1px solid #c1c86b;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+/* ----------------------------- */
+/*      FERIADOS EN LA TABLA     */
+/* ----------------------------- */
+
+.feriado-inamovible {
+    background: #ffe4e4 !important;
+}
+
+.feriado-trasladable {
+    background: #e0f3ff !important;
+}
+
+.feriado-turistico {
+    background: #fbffcc !important;
+}
+
+/* ----------------------------- */
+/*      CELDAS ESPECIALES        */
+/* ----------------------------- */
+
+.cambio-dia {
+    background: #fff3cd !important;
+    border: 2px solid #ffcd39 !important;
+}
+
+.falta-aviso {
+    background: #ffd6e0 !important;
+    border: 1px solid #b76b7f !important;
+}
+
+.reemplazo {
+    background: #e5d1ff !important;
+    border: 1px solid #9a7cc3 !important;
+}
+
+.franco-trabajado {
+    background: #ffe0b8 !important;
+    border: 1px solid #c38a6b !important;
+}
+
+/* ----------------------------- */
+/*      TABLAS INTERNAS          */
+/* ----------------------------- */
+
+#referencias {
+    margin-top: 14px;
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+#referencias div {
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+}
+
+/* ----------------------------- */
+/*      HOVER EN CELDAS          */
+/* ----------------------------- */
+
+td:hover {
+    outline: 2px solid #61a8ff;
+    cursor: pointer;
+}
+/* --------------------------------------- */
+/*     ESTILOS PARA IMPRESIÓN GENERAL      */
+/* --------------------------------------- */
+
+@media print {
+
+    body {
+        background: white !important;
+    }
+
+    button, .no-imprimir, .mov-iconos {
+        display: none !important;
+    }
+
+    #contenedor {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #detalle {
+        box-shadow: none !important;
+        border: none !important;
+    }
+}
+
+/* --------------------------------------- */
+/*      PLANILLAS DE SOLICITUD / PERMISO   */
+/* --------------------------------------- */
+
+.planilla {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    width: 95%;
+    margin: auto;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.planilla h2 {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.planilla .bloque {
+    border: 2px solid #333;
+    padding: 14px;
+    margin-bottom: 20px;
+}
+
+.planilla .firma {
+    margin-top: 35mm; /* espacio para firmar */
+}
+
+.firma-linea {
+    border-bottom: 1px solid #000;
+    width: 70%;
+    margin-bottom: 4px;
+}
+
+.firma-nombre {
+    font-size: 14px;
+    margin-top: 2mm; /* distancia de 2mm al nombre */
+}
+
+/* --------------------------------------- */
+/*       LINEA DE CORTE — 25 mm           */
+/* --------------------------------------- */
+
+.linea-corte {
+    width: 100%;
+    border-bottom: 1px dashed #000;
+    margin-top: 25mm;
+}
+
+/* --------------------------------------- */
+/*     AJUSTES FINALES DEL HEADER          */
+/* --------------------------------------- */
+
+header h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+}
+
+header .subtitulo {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* --------------------------------------- */
+/*    CONTENEDOR DE CONFIGURACIÓN          */
+/* --------------------------------------- */
+
+#configuracion-panel {
+    display: none;
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.2);
+    margin-top: 10px;
+}
+
+#configuracion-panel h3 {
+    margin-top: 0;
+    font-size: 18px;
+}
+
+#configuracion-panel .item {
+    margin-bottom: 12px;
+}
+
+/* FIN DEL STYLE */
+</style>
+</head>
