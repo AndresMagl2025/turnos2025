@@ -1,1 +1,398 @@
+/* ============================================
+   ESTILOS GENERALES — CONTROL TURNOS v1.6
+   Autor: Andrés Magliano
+   ============================================ */
+
+/* Variables globales */
+:root{
+  --celeste-m:rgba(150,220,255,.30);
+  --naranja-t:rgba(255,190,130,.28);
+  --azul-n:rgba(80,130,190,.30);
+  --violeta-f:#d8b0ff;
+
+  --amarillo-hoy:rgba(255,245,130,.55);
+  --hoy-borde:#ffe15b;
+  --hoy-shadow:0 0 12px rgba(255,245,130,.9);
+
+  --rojo-mov:#ff4040;
+  --naranja-fuera:#ff7b00;
+
+  --turquesa-1:#00c2d1;
+  --turquesa-2:#00a0b1;
+  --rojo-1:#d65b5b;
+  --rojo-2:#c14848;
+
+  /* Paleta feriados */
+  --feriado-inam:#7e57c2;
+  --feriado-tras:#26a69a;
+  --feriado-tur:#ff7043;
+  --feriado-nol:#8d6e63;
+  --feriado-esp:#5c6bc0;
+
+  /* Falta con aviso */
+  --fa-color:#ffb3d1;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+/* Tema oscuro */
+body{
+  margin:16px;
+  background:#050608;
+  color:#f5f5f5;
+  font-family:"Poppins","Nunito","Calibri","Segoe UI",system-ui,-apple-system,sans-serif;
+}
+
+h1{
+  margin:0 0 10px;
+  text-align:center;
+  font-weight:800;
+  font-size:22px;
+  color:#fafafa;
+}
+
+#tituloMes{
+  margin:4px 0 16px;
+  text-align:center;
+  font-weight:900;
+  font-size:26px;
+  color:#ffffff;
+}
+
+/* Controles superiores */
+#controles{
+  max-width:1400px;
+  margin:0 auto 12px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:nowrap;
+  background:#111319;
+  padding:8px 10px;
+  border-radius:14px;
+  box-shadow:0 6px 16px rgba(0,0,0,.6);
+}
+
+.ctrl-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:nowrap;
+  align-items:center;
+}
+
+button{
+  cursor:pointer;
+  transition:.18s;
+  user-select:none;
+}
+
+button.ctrl{
+  padding:6px 10px;
+  border-radius:10px;
+  border:1px solid #444;
+  background:#1c1f26;
+  color:#f5f5f5;
+  font-weight:700;
+  font-size:12px;
+}
+
+button.ctrl:hover{
+  filter:brightness(1.25);
+  box-shadow:0 6px 16px rgba(0,0,0,.85);
+  transform:translateY(-1px);
+}
+
+#openPanelBtn{
+  background:linear-gradient(135deg,var(--turquesa-1),var(--turquesa-2));
+  color:#fff;
+  border:1.2px solid #000;
+}
+
+#undoBtn{
+  background:linear-gradient(135deg,var(--rojo-1),var(--rojo-2));
+  color:#fff;
+  border:1.2px solid #000;
+}
+
+#configBtn{
+  background:#232736;
+  border:1.2px solid #555;
+  color:#f5f5f5;
+}
+
+/* Estructura general */
+.wrapper{
+  max-width:1400px;
+  margin:0 auto 14px;
+  position:relative;
+  background:#10131a;
+  padding:10px 12px 14px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.7);
+}
+
+table{
+  border-collapse:collapse;
+  width:100%;
+  table-layout:fixed;
+  margin:0 auto 10px;
+  font-size:14px;
+  background:#131722;
+}
+
+th,td{
+  border:1px solid #333;
+  text-align:center;
+  padding:4px 3px;
+  position:relative;
+  color:#f5f5f5;
+}
+
+th:first-child,td:first-child{
+  width:260px;
+  text-align:left;
+  font-weight:900;
+  background:#181c27;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  font-size:15px;
+  text-transform:uppercase;
+  letter-spacing:0.4px;
+}
+
+/* Encabezados */
+thead tr:first-child th:not(:first-child){
+  background:#202636;
+  font-weight:800;
+}
+
+thead tr.days-row th:not(:first-child){
+  background:#006b7a;
+  color:#fff;
+  font-weight:800;
+}
+
+/* Colores de turnos */
+td.M{ background:var(--celeste-m); }
+td.T{ background:var(--naranja-t); }
+td.N{ background:var(--azul-n); }
+td.F{ background:var(--violeta-f); color:#111; }
+
+/* Día actual */
+.hoy-cell{
+  background:var(--amarillo-hoy)!important;
+  box-shadow:var(--hoy-shadow);
+  color:#000!important;
+  font-weight:900;
+}
+
+thead th.hoy-head{
+  background:#ffd65b !important;
+  color:#000 !important;
+  box-shadow:inset 0 0 6px rgba(255,235,120,.9);
+}
+
+.hoy-col-marker{
+  position:absolute;
+  border:1.5px solid var(--hoy-borde);
+  pointer-events:none;
+  z-index:2;
+  background:transparent;
+}
+
+/* Movimientos */
+td.mov-rojo{
+  box-shadow: inset 0 0 0 9999px var(--rojo-mov) !important;
+  color:#fff !important;
+  font-weight:900;
+}
+
+td.mov-outline{
+  box-shadow: inset 0 0 0 1.5px #fff, inset 0 0 0 9999px transparent;
+}
+
+td.fueraHorario{
+  box-shadow: inset 0 0 0 9999px var(--naranja-fuera) !important;
+  color:#fff !important;
+  font-weight:900;
+}
+
+td.fh-ico{
+  position:absolute;
+  right:2px;
+  bottom:1px;
+  font-size:12px;
+}
+
+td.mov-fa{
+  box-shadow:inset 0 0 0 9999px var(--fa-color) !important;
+  color:#fff !important;
+  font-weight:900;
+}
+
+/* Tooltip */
+td.tooltip::after{
+  content:attr(data-tip);
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:100%;
+  margin-bottom:6px;
+  white-space:nowrap;
+  background:#000;
+  color:#fff;
+  font-size:12px;
+  padding:4px 6px;
+  border-radius:6px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s;
+  z-index:50;
+}
+
+td.tooltip:hover::after{ opacity:1; }
+
+/* Feriados */
+.feriado-mark::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:4px;
+  background:#999;
+  border-bottom:1px solid rgba(0,0,0,.4);
+}
+
+.feriado-inamovible::before{ background:var(--feriado-inam); }
+.feriado-trasladable::before{ background:var(--feriado-tras); }
+.feriado-turistico::before{ background:var(--feriado-tur); }
+.feriado-no-laborable::before{ background:var(--feriado-nol); }
+.feriado-especial::before{ background:var(--feriado-esp); }
+
+.feriado-flag{
+  position:absolute;
+  top:1px;
+  right:2px;
+  font-size:11px;
+}
+
+/* Detalles */
+#detalles-wrap{
+  max-width:1400px;
+  margin:12px auto 20px;
+  display:flex;
+  gap:18px;
+  align-items:flex-start;
+  background:#111319;
+  padding:12px 14px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.7);
+}
+
+#detalles-mov,#detalles-feriados{
+  flex:1;
+  min-width:0;
+}
+
+#detalles-mov h2{
+  font-size:18px;
+  font-weight:900;
+  margin:0 0 6px;
+  color:#ffffff;
+}
+
+#detalles-mov h3,#detalles-feriados h3{
+  font-size:16px;
+  font-weight:900;
+  margin:8px 0 6px;
+  color:#f0f0f0;
+}
+
+.detline{ margin:3px 0; color:#e0e0e0; }
+.det-tag{
+  display:inline-block;
+  padding:2px 6px;
+  border-radius:10px;
+  font-weight:800;
+  color:#111;
+  margin-left:6px;
+  font-size:12px;
+}
+
+.tag-inam{ background:var(--feriado-inam); }
+.tag-tras{ background:var(--feriado-tras); }
+.tag-tur{ background:var(--feriado-tur); }
+.tag-nol{ background:var(--feriado-nol); }
+.tag-esp{ background:var(--feriado-esp); }
+
+/* Footer */
+.footer{
+  max-width:1400px;
+  margin:6px auto 0;
+  text-align:center;
+  color:#cccccc;
+  font-size:13px;
+}
+
+.footer .sep{
+  height:1px;
+  background:#333;
+  margin:8px 0;
+}
+
+/* Impresión */
+@page{ size:A4 landscape; margin:10mm; }
+
+@media print{
+  body{
+    background:#ffffff !important;
+    color:#000000 !important;
+    margin:0;
+  }
+
+  #controles,#overlay,#overlayCfg,#navInferior{
+    display:none!important;
+  }
+
+  .wrapper,#detalles-wrap{
+    box-shadow:none;
+    background:#ffffff;
+    padding:0;
+  }
+
+  table{
+    page-break-inside:avoid;
+    background:#ffffff;
+  }
+
+  th,td{
+    border:1px solid #000;
+    color:#000;
+  }
+
+  th:first-child,td:first-child{
+    background:#ffffff;
+    color:#000;
+    text-transform:none;
+  }
+}
+
+/* Responsivo */
+@media(max-width:900px){
+  #controles{
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .ctrl-row{ flex-wrap:wrap; }
+  th:first-child,td:first-child{ width:200px; }
+  .form-grid{ grid-template-columns:1fr 1fr; }
+  #detalles-wrap{ flex-direction:column; }
+}
 
