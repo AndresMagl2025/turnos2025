@@ -1,1 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Turnos — v1.6 B1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ===========================
+     ESTILOS
+=========================== -->
+<link rel="stylesheet" href="css/estilos.css">
+
+</head>
+<body>
+
+<!-- ===========================================================
+     CABECERA / TITULO
+=========================================================== -->
+<header>
+    <div id="nav">
+        <button id="prev" class="navbtn">⟸</button>
+        <h1 id="tituloMes">Mes Año</h1>
+        <button id="next" class="navbtn">⟹</button>
+    </div>
+</header>
+
+
+
+<!-- ===========================================================
+     TABLA PRINCIPAL
+=========================================================== -->
+<section id="seccionTabla">
+    <table id="tabla"></table>
+</section>
+
+
+
+<!-- ===========================================================
+     PANEL DERECHO (DETALLES)
+=========================================================== -->
+<aside id="historial"></aside>
+
+
+
+<!-- ===========================================================
+     PANEL EMERGENTE (CARGA DE MOVIMIENTOS)
+=========================================================== -->
+
+<div id="panel" class="panel">
+    <div class="panel-box">
+
+        <div class="panel-header">
+            <h2>Cargar Movimiento</h2>
+            <button id="cerrarPanel" class="closeBtn">✖</button>
+        </div>
+
+        <!-- Acción -->
+        <div class="row">
+            <label>Acción</label>
+            <select id="accionSel">
+                <option value="">Seleccione…</option>
+                <option value="reemplazo">Reemplazo</option>
+                <option value="cambio">Cambio de día</option>
+                <option value="franco">Franco trabajado</option>
+                <option value="falta">Falta con aviso</option>
+                <option value="fuera">Entrada/Salida fuera de horario</option>
+            </select>
+        </div>
+
+        <!-- Día -->
+        <div id="rowDia" class="row" style="display:none;">
+            <label>Día</label>
+            <input type="number" id="dia1" min="1" max="31">
+        </div>
+
+        <!-- Operario -->
+        <div id="rowOperario" class="row" style="display:none;">
+            <label>Operario</label>
+            <select id="operarioSel"></select>
+        </div>
+
+        <!-- Reemplazo -->
+        <div id="rowReemplazo" class="row" style="display:none; flex-direction:column;">
+            <label>Reemplazado</label>
+            <select id="reemplazadoSel"></select>
+
+            <label style="margin-top:8px;">Reemplazante</label>
+            <select id="reemplazanteSel"></select>
+        </div>
+
+        <!-- Turno -->
+        <div id="rowTurno" class="row" style="display:none;">
+            <label>Turno</label>
+            <select id="turnoSel">
+                <option value="M">M</option>
+                <option value="T">T</option>
+                <option value="N">N</option>
+                <option value="F">F</option>
+            </select>
+        </div>
+
+        <!-- Modo (entrada/salida) -->
+        <div id="rowModo" class="row" style="display:none;">
+            <label>Modo</label>
+            <select id="modoSel">
+                <option value="entrada">Entrada</option>
+                <option value="salida">Salida</option>
+            </select>
+        </div>
+
+        <!-- Hora real -->
+        <div id="rowHoraReal" class="row" style="display:none;">
+            <label>Hora real</label>
+            <input type="time" id="horaReal">
+        </div>
+
+        <!-- Hora programada -->
+        <div id="rowHoraProg" class="row" style="display:none;">
+            <label>Hora programada</label>
+            <input type="time" id="horaProg">
+        </div>
+
+        <!-- Comentario -->
+        <div id="rowComentario" class="row">
+            <label>Comentario</label>
+            <input type="text" id="comentario" placeholder="Opcional…">
+        </div>
+
+        <!-- Confirmar -->
+        <button id="registrarBtn" class="btnConfirmar">Registrar</button>
+
+    </div>
+</div>
+
+
+
+<!-- ===========================================================
+     BOTONES SECUNDARIOS
+=========================================================== -->
+
+<div id="accionesInferiores">
+    <button id="abrirPanelBtn" onclick="abrirPanel()">➕ Nuevo Movimiento</button>
+    <button id="printRegBtn">🖨 Imprimir Registros</button>
+    <button id="printPermBtn">🖨 Imprimir Permiso</button>
+    <button id="btnConfig" onclick="elegirCarpeta()">⚙ Configurar Carpeta</button>
+</div>
+
+
+
+<!-- ===========================================================
+     SCRIPTS MODULARES (NUEVOS)
+=========================================================== -->
+
+<script src="js/utilidades.js"></script>
+<script src="js/feriados.js"></script>
+<script src="js/config.js"></script>
+<script src="js/render.js"></script>
+<script src="js/panel.js"></script>
+
+<script src="js/reemplazos.js"></script>
+<script src="js/cambios.js"></script>
+<script src="js/francos.js"></script>
+<script src="js/faltas.js"></script>
+<script src="js/fueraHorario.js"></script>
+
+<script src="js/detalles.js"></script>
+<script src="js/impresion.js"></script>
+
+</body>
+</html>
 
